@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BurgerBuns
+  - Lettuce
+  - Tomatoes
+  - Cheese
+  - Fridge
+  - CuttingBoard
+  - Stove
+  - Sink
+  - Window
+  - WorkSpace
   layers:
   - Default
   - TransparentFX

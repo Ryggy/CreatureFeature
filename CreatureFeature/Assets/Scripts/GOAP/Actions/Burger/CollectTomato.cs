@@ -11,6 +11,7 @@ public class CollectTomato : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.SpawnModel("food_ingredient_tomato", 0);
         return true;
     }
 }

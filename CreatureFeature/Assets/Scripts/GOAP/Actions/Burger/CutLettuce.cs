@@ -11,6 +11,7 @@ public class CutLettuce : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.RemoveModel(2);
         return true;
     }
 }

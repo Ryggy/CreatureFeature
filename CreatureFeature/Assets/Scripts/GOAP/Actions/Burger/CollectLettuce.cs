@@ -11,6 +11,7 @@ public class CollectLettuce : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.SpawnModel("food_ingredient_lettuce", 0);
         return true;
     }
 }

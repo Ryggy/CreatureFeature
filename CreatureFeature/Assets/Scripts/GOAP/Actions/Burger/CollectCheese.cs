@@ -11,6 +11,10 @@ public class CollectCheese : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.SpawnModel("food_ingredient_cheese", 0);
+        
         return true;
     }
+
+    
 }

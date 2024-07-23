@@ -11,6 +11,8 @@ public class CollectBuns : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.SpawnModel("food_ingredient_bun", 0);
+
         return true;
     }
 }

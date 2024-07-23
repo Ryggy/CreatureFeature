@@ -11,6 +11,7 @@ public class CookMeat : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.RemoveModel(1);
         return true;
     }
 }

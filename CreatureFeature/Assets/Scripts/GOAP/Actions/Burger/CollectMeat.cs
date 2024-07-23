@@ -11,6 +11,7 @@ public class CollectMeat : GAction
 
     public override bool PostPerform()
     {
+        //ModelDictionary.Instance.SpawnModel("food_ingredient_burger_uncooked", 0);
         return true;
     }
 }

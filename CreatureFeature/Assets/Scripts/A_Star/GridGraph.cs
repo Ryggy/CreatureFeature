@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GridGraph : MonoBehaviour
+public class GridGraph
 {
-    public int gridSizeX;
-    public int gridSizeZ;
-    public float nodeSize = 1.0f;
+    private int gridSizeX;
+    private int gridSizeZ;
+    public float nodeSize = 1f;
     public float offset = 0.5f;
     
     public bool showOutline = true;
@@ -18,11 +18,19 @@ public class GridGraph : MonoBehaviour
 
     void Start()
     {
-        GenerateGrid();
+        //GenerateGrid();
+    }
+
+    public GridGraph(int gridSizeX, int gridSizeZ)
+    {
+        this.gridSizeX = gridSizeX;
+        this.gridSizeZ = gridSizeZ;
     }
     
-    void GenerateGrid()
+    public void GenerateGrid(bool allowDiagonalMovement)
     {
+        this.allowDiagonalMovement = allowDiagonalMovement;
+        
         grid = new GridNode[gridSizeX, gridSizeZ];
 
         for (int x = 0; x < gridSizeX; x++)
@@ -30,10 +38,35 @@ public class GridGraph : MonoBehaviour
             for (int z = 0; z < gridSizeZ; z++)
             {
                 Vector2Int position = new Vector2Int(x, z);
-                bool walkable = true; // add logic to determine if a node is walkable
+                bool walkable = true;
+                
+                // TO DO: add logic to determine if a node is walkable
+
                 grid[x, z] = new GridNode(position, walkable);
             }
         }
+    }
+    
+    // Update the walkable status of a specific node and recalculate connections if needed
+    public void UpdateNode(Vector2Int position, bool walkable)
+    {
+        if (IsValidPosition(position))
+        {
+            GridNode node = GetNodeFromIndex(position.x, position.y);
+            node.Walkable = walkable;
+            grid[position.x, position.y] = node;
+            
+            UpdateConnections(position);
+        }
+    }
+    
+    private void UpdateConnections(Vector2Int position)
+    {
+        // Find the updated node
+        GridNode node = grid[position.x, position.y];
+
+        // Update connections for this node
+        List<Connection> connections = GetConnections(node);
     }
     
     public List<Connection> GetConnections(GridNode node)
@@ -75,7 +108,7 @@ public class GridGraph : MonoBehaviour
         return connections;
     }
 
-    bool IsValidPosition(Vector2Int position)
+    public bool IsValidPosition(Vector2Int position)
     {
         return position.x >= 0 && position.x < gridSizeX && position.y >= 0 && position.y < gridSizeZ;
     }
@@ -85,60 +118,8 @@ public class GridGraph : MonoBehaviour
         return new Vector3(node.Position.x + offset, 0, node.Position.y + offset) * nodeSize;
     }
 
-    
-    void OnDrawGizmos()
+    public GridNode GetNodeFromIndex(int x, int z)
     {
-        if (grid == null) return;
-
-        Gizmos.color = Color.green;
-
-        if (showOutline)
-        {
-            for (int x = 0; x < gridSizeX; x++)
-            {
-                for (int z = 0; z < gridSizeZ; z++)
-                {
-                    GridNode node = grid[x, z];
-                    Vector3 nodePos = (new Vector3(node.Position.x + offset, 0, node.Position.y + offset) * nodeSize);
-                    DrawSquareOutline(nodePos, nodeSize);
-                }
-            }
-        }
-
-        if (showConnections)
-        {
-            Gizmos.color = Color.red;
-            for (int x = 0; x < gridSizeX; x++)
-            {
-                for (int z = 0; z < gridSizeZ; z++)
-                {
-                    GridNode node = grid[x, z];
-                    if (!node.Walkable) continue;
-
-                    List<Connection> connections = GetConnections(node);
-                    foreach (var connection in connections)
-                    {
-                        Vector3 fromPos = new Vector3(node.Position.x + offset, 0, node.Position.y + offset) * nodeSize;
-                        Vector3 toPos = new Vector3(connection.ToNode.Position.x + offset, 0, connection.ToNode.Position.y + offset) * nodeSize;
-                        Gizmos.DrawLine(fromPos, toPos);
-                        Gizmos.DrawLine(fromPos, toPos);
-                    }
-                }
-            }
-        }
-    }
-    
-    void DrawSquareOutline(Vector3 center, float size)
-    {
-        Vector3 halfSize = Vector3.one * (size / 2.0f);
-        Vector3 topLeft = center + new Vector3(-halfSize.x, 0, halfSize.z);
-        Vector3 topRight = center + new Vector3(halfSize.x, 0, halfSize.z);
-        Vector3 bottomLeft = center + new Vector3(-halfSize.x, 0, -halfSize.z);
-        Vector3 bottomRight = center + new Vector3(halfSize.x, 0, -halfSize.z);
-
-        Gizmos.DrawLine(topLeft, topRight);
-        Gizmos.DrawLine(topRight, bottomRight);
-        Gizmos.DrawLine(bottomRight, bottomLeft);
-        Gizmos.DrawLine(bottomLeft, topLeft);
+        return grid[x, z];
     }
 }

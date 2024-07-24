@@ -33,6 +33,13 @@ public class Pathfinding : MonoBehaviour
 
     public List<GridNode> FindPath(Vector3 startWorldPos, Vector3 endWorldPos)
     {
+        if (!gridGraph.IsValidPosition(new Vector2Int((int)startWorldPos.x, (int)startWorldPos.z)) 
+            ||!gridGraph.IsValidPosition(new Vector2Int((int)endWorldPos.x, (int)endWorldPos.z)))
+        {
+            Debug.Log("Invalid Path: incorrect start or end position");
+            return null;
+        }
+        
         Vector2Int startGridPos = WorldToGrid(startWorldPos);
         Vector2Int endGridPos = WorldToGrid(endWorldPos);
 

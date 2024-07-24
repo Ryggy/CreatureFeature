@@ -6,26 +6,29 @@ public class UnitPathfinding : MonoBehaviour
 {
     public Transform target;
     private Pathfinding pathfinding;
+    private WorldGeneration worldGeneration;
     private GridGraph gridGraph;
     private List<GridNode> path;
     private int currentPathIndex;
-    public float pathUpdateDistance = 0.5f; // Distance threshold to skip pathfinding
+    public float pathUpdateDistance = 1; // Distance threshold to skip pathfinding
 
     void Start()
     {
-        gridGraph = FindObjectOfType<GridGraph>();
+        worldGeneration = FindObjectOfType<WorldGeneration>();
+        target = GameObject.FindGameObjectWithTag("Target").transform;
+        gridGraph = worldGeneration.gridGraph;
         pathfinding = new Pathfinding(gridGraph);
-        InvokeRepeating(nameof(FindPath), 0f, 1f); // Find path every 2 seconds
+        InvokeRepeating(nameof(FindPath), 0f, 0.5f); // Find path every 0.5 seconds
     }
 
     void FindPath()
     {
-        // Check if the unit is within the update distance to the target
-        if (Vector3.Distance(transform.position, target.position) > pathUpdateDistance)
-        {
+        // // Check if the unit is within the update distance to the target
+        // if (Vector3.Distance(transform.position, target.position) > pathUpdateDistance)
+        // {
             path = pathfinding.FindPath(transform.position, target.position);
             currentPathIndex = 0;
-        }
+        //}
     }
 
     void Update()
@@ -46,4 +49,17 @@ public class UnitPathfinding : MonoBehaviour
         }
     }
     
+    void OnDrawGizmos()
+    {
+        if (path == null || path.Count == 0) return;
+
+        Gizmos.color = Color.yellow;
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Vector3 fromPos = gridGraph.GetWorldPositionFromNode(path[i]);
+            Vector3 toPos = gridGraph.GetWorldPositionFromNode(path[i + 1]);
+            Gizmos.DrawLine(fromPos, toPos);
+        }
+    }
 }

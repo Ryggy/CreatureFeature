@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
-public class ModelDictionary : MonoBehaviour
+public class ModelSpawner : MonoBehaviour
 {
    public GameObject modelBeingCarried;
    public GameObject modelOnStove;
@@ -19,7 +19,7 @@ public class ModelDictionary : MonoBehaviour
     
     
     // Singleton instance
-    public static ModelDictionary Instance { get; private set; }
+    public static ModelSpawner Instance { get; private set; }
 
     private Dictionary<string, Queue<GameObject>> modelPoolDictionary;
     private Vector3 poolLocation = new Vector3(100, 100, 100);
